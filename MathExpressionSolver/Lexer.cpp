@@ -3,50 +3,62 @@
 #include <stdexcept>
 #include <vector>
 
-
-// TREBUIE SA DEALOCAM TOKENURILE DUPA CE LE FOLOSIM ALTFEL AVEM MEMORY LEAKS
 std::vector<Token*> Lexer::tokenize(const std::string& input) {
+    return tokenizeExpression(input);
+}
+
+std::pair<std::vector<Token*>, std::vector<Token*>> Lexer::splitEquation(const std::string& input) {
+    size_t equalPos = input.find('=');
+    if (equalPos == std::string::npos) {
+        throw std::runtime_error("Expected equation in form of (ax+b = c)");
+    }
+
+    std::string leftSide = input.substr(0, equalPos);
+    std::string rightSide = input.substr(equalPos + 1);
+
+    return { tokenizeExpression(leftSide), tokenizeExpression(rightSide) };
+}
+
+bool Lexer::containsEquation(const std::string& input) const {
+    return input.find('=') != std::string::npos;
+}
+
+std::vector<Token*> Lexer::tokenizeExpression(const std::string& expression) {
     std::vector<Token*> tokens;
 
-    for (size_t i = 0; i < input.length(); ++i) {
-        char c = input[i];
+    for (size_t i = 0; i < expression.length(); ++i) {
+        char c = expression[i];
 
-        // Nu folosim switch ca avem un caracter (trb sa facem un case pt fiecare caracter) si e mai greu de citit
-        if (isDigit(c) || (c == '.' && i + 1 < input.length() && isDigit(input[i + 1]))) {
-            // Citirea numerelor (inclusiv numere cu .)
+        if (isDigit(c) || (c == '.' && i + 1 < expression.length() && isDigit(expression[i + 1]))) {
             std::string numStr(1, c);
-            while (i + 1 < input.length() && (isDigit(input[i + 1]) || input[i + 1] == '.')) {
-                numStr += input[++i];
+            while (i + 1 < expression.length() && (isDigit(expression[i + 1]) || expression[i + 1] == '.')) {
+                numStr += expression[++i];
             }
             tokens.push_back(new NumberToken(numStr));
         }
         else if (OperatorToken::isValidOperator(c)) {
-            // Operatori
             auto props = OperatorToken::getOperatorProperties(c);
             tokens.push_back(new OperatorToken(std::string(1, c), props.precedence, props.isLeftAssociative));
         }
         else if (isAlpha(c)) {
-            // Variabile
-            // TODO: Singleton ca sa nu rezolv ecuatii cu mai multe necunoscute (deocamdata)
             std::string varStr(1, c);
-            while (i + 1 < input.length() && isAlpha(input[i + 1])) {
-                varStr += input[++i];
+            while (i + 1 < expression.length() && isAlpha(expression[i + 1])) {
+                varStr += expression[++i];
             }
             tokens.push_back(new VariableToken(varStr));
         }
         else if (c == '(' || c == '[') {
-            // Pt precedenta, shunting foloseste doar paranteze rotunde dar pot fi mai multe paranteze deschise deci e ok (cred)
+            // TODO: We currently consider both as paranthesis, we should probably atleast check if the count of ( and [ are equal and not have a ) end a [ for example
             tokens.push_back(new ParenthesisToken(std::string(1, c), true));
         }
         else if (c == ')' || c == ']') {
             tokens.push_back(new ParenthesisToken(std::string(1, c), false));
         }
         else if (std::isspace(c)) {
-            // Ignoram spatiile
+            // Spaces are ignored
             continue;
         }
         else {
-            // nu e niciunul din cele de mai sus
             throw std::runtime_error("Invalid character in input");
         }
     }
@@ -60,4 +72,12 @@ bool Lexer::isDigit(char c) const {
 
 bool Lexer::isAlpha(char c) const {
     return std::isalpha(static_cast<unsigned char>(c));
+}
+
+bool Lexer::isVariableToken(const Token* token) const {
+    return token->getType() == TokenType::Variable;
+}
+
+bool Lexer::isNumberToken(const Token* token) const {
+    return token->getType() == TokenType::Number;
 }

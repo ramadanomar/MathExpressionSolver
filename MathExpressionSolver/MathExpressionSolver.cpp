@@ -1,20 +1,41 @@
-// MathExpressionSolver.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
+#include "Lexer.h"
 #include <iostream>
+#include <vector>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+int main() {
+    std::string input = "x + 5.34 + 323 - 64/33$";
+    Lexer lexer;
+    std::vector<Token*> tokens;
+
+    try {
+        tokens = lexer.tokenize(input);
+    }
+    catch (const std::runtime_error& e) {
+        std::cerr << "Error tokenizing input: " << e.what() << std::endl;
+        return 1;
+    }
+
+    for (const auto& token : tokens) {
+        switch (token->getType()) {
+        case TokenType::Number:
+            std::cout << "nr: " << token->getValue() << std::endl;
+            break;
+        case TokenType::Operator:
+            std::cout << "op: " << token->getValue() << std::endl;
+            break;
+        case TokenType::Variable:
+            std::cout << "var: " << token->getValue() << std::endl;
+            break;
+        case TokenType::Parenthesis:
+            std::cout << "paranteza: " << token->getValue() << std::endl;
+            break;
+        }
+    }
+
+    // garbage collection
+    for (auto& token : tokens) {
+        delete token;
+    }
+
+    return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

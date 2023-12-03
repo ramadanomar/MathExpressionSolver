@@ -39,14 +39,7 @@ private:
     int precedence;
     bool isLeftAssociative;
 
-public:
-    OperatorToken(std::string value, int precedence, bool isLeftAssociative)
-        : Token(TokenType::Operator, std::move(value)), precedence(precedence), isLeftAssociative(isLeftAssociative) {}
-
-    int getPrecedence() const { return precedence; }
-    bool getIsLeftAssociative() const { return isLeftAssociative; }
-
-    static const OperatorProperties& getProperties(char op) {
+    static const std::map<char, OperatorProperties>& getOperatorsMap() {
         static const std::map<char, OperatorProperties> operators = {
             {'+', {1, true}},
             {'-', {1, true}},
@@ -56,8 +49,26 @@ public:
             {'=', {0, false}},  // equality
             {'#', {4, false}}   // sqrt
         };
+        return operators;
+    }
 
-        return operators.at(op);
+public:
+    OperatorToken(std::string value, int precedence, bool isLeftAssociative)
+        : Token(TokenType::Operator, std::move(value)), precedence(precedence), isLeftAssociative(isLeftAssociative) {}
+
+    int getPrecedence() const { return precedence; }
+    bool getIsLeftAssociative() const { return isLeftAssociative; }
+
+    static const OperatorProperties& getOperatorProperties(char op) {
+		return getOperatorsMap().at(op);
+	}
+
+    static bool isValidOperator(char op) {
+    
+        // std::map.find()
+        // Return Value: The function returns an iterator or a constant iterator which refers to the position where the key is present in the map. 
+        // If the key is not present in the map container, it returns an iterator or a constant iterator which refers to map.end(). 
+        return getOperatorsMap().find(op) != getOperatorsMap().end();
     }
 };
 

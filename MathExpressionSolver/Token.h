@@ -28,6 +28,12 @@ public:
     const std::string& getValue() const { return value; }
 };
 
+class NumberToken : public Token {
+public:
+    NumberToken(std::string value) : Token(TokenType::Number, std::move(value)) {}
+};
+
+
 class OperatorToken : public Token {
 private:
     int precedence;
@@ -53,6 +59,11 @@ public:
 
         return operators.at(op);
     }
+};
+
+class VariableToken : public Token {
+public:
+    VariableToken(std::string value) : Token(TokenType::Variable, std::move(value)) {}
 };
 
 

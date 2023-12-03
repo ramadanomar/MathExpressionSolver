@@ -127,11 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ExpressionEvaluator.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="MathExpressionSolver.cpp" />
     <ClCompile Include="ShuntingYard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="ShuntingYard.h" />
     <ClInclude Include="Token.h" />

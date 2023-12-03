@@ -7,21 +7,6 @@ std::vector<Token*> Lexer::tokenize(const std::string& input) {
     return tokenizeExpression(input);
 }
 
-std::pair<std::vector<Token*>, std::vector<Token*>> Lexer::splitEquation(const std::string& input) {
-    size_t equalPos = input.find('=');
-    if (equalPos == std::string::npos) {
-        throw std::runtime_error("Expected equation in form of (ax+b = c)");
-    }
-
-    std::string leftSide = input.substr(0, equalPos);
-    std::string rightSide = input.substr(equalPos + 1);
-
-    return { tokenizeExpression(leftSide), tokenizeExpression(rightSide) };
-}
-
-bool Lexer::containsEquation(const std::string& input) const {
-    return input.find('=') != std::string::npos;
-}
 
 std::vector<Token*> Lexer::tokenizeExpression(const std::string& expression) {
     std::vector<Token*> tokens;

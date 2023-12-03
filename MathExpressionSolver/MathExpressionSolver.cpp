@@ -31,31 +31,6 @@ int main() {
 
     // Aparent nu trb sa implementez ecuatii ca nu sunt intr o echipa
     try {
-        if (lexer.containsEquation(input)) {
-            equationParts = lexer.splitEquation(input);
-
-            std::cout << "Left Side Tokens:\n";
-            for (const auto& token : equationParts.first) {
-                std::cout << tokenTypeToString(token->getType()) << ": " << token->getValue() << std::endl;
-            }
-
-			std::cout << "\nLeft Side RPN Tokens:\n";
-            auto leftSideRPN = shuntingYard.infixToPostfix(equationParts.first);
-            for (const auto& token : leftSideRPN) {
-				std::cout << tokenTypeToString(token->getType()) << ": " << token->getValue() << std::endl;
-			}
-
-            std::cout << "\nRight Side Tokens:\n";
-            for (const auto& token : equationParts.second) {
-                std::cout << tokenTypeToString(token->getType()) << ": " << token->getValue() << std::endl;
-            }
-
-            std::cout << "\nRight Side RPN Tokens:\n";
-            for (const auto& token : shuntingYard.infixToPostfix(equationParts.second)) {
-				std::cout << tokenTypeToString(token->getType()) << ": " << token->getValue() << std::endl;
-			}
-        }
-        else {
             // Nu este ecuatie
             auto tokens = lexer.tokenize(input);
             for (const auto& token : tokens) {
@@ -69,21 +44,12 @@ int main() {
 
             double result = evaluator.evaluate(shuntingYard.infixToPostfix(tokens));
             std::cout << "\nResult: " << result << std::endl;
-
-        }
     }
     catch (const std::runtime_error& e) {
         std::cerr << "Error processing input: " << e.what() << std::endl;
         return 1;
     }
 
-    // Clean up tokens for equations
-    for (auto& token : equationParts.first) {
-        delete token;
-    }
-    for (auto& token : equationParts.second) {
-        delete token;
-    }
 
     return 0;
 }

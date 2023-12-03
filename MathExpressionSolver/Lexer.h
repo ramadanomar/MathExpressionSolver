@@ -8,9 +8,6 @@
 class Lexer {
 public:
     std::vector<Token*> tokenize(const std::string& input);
-    std::pair<std::vector<Token*>, std::vector<Token*>> splitEquation(const std::string& input);
-    bool containsEquation(const std::string& input) const;
-
 private:
     bool isDigit(char c) const;
     bool isAlpha(char c) const;

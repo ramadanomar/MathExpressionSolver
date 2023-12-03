@@ -47,7 +47,7 @@ private:
             {'/', {2, true}},
             {'^', {3, false}},
             {'=', {0, false}},  // equality
-            {'#', {4, false}}   // sqrt
+            {'#', {4, false}}   // root
         };
         return operators;
     }

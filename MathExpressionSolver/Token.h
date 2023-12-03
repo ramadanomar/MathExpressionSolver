@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <map>
+#include <stdexcept>
 
 enum class TokenType {
     Number,
@@ -39,36 +39,43 @@ private:
     int precedence;
     bool isLeftAssociative;
 
-    static const std::map<char, OperatorProperties>& getOperatorsMap() {
-        static const std::map<char, OperatorProperties> operators = {
-            {'+', {1, true}},
-            {'-', {1, true}},
-            {'*', {2, true}},
-            {'/', {2, true}},
-            {'^', {3, false}},
-            {'=', {0, false}},  // equality
-            {'#', {4, false}}   // root
-        };
-        return operators;
+    static OperatorProperties _getOperatorProperties(char op) {
+        switch (op) {
+        case '+': return { 1, true };
+        case '-': return { 1, true };
+        case '*': return { 2, true };
+        case '/': return { 2, true };
+        case '^': return { 3, false };
+        case '=': return { 0, false };  // equality
+        case '#': return { 4, false };  // root
+        default: throw std::invalid_argument("Invalid operator");
+        }
     }
 
 public:
     OperatorToken(std::string value, int precedence, bool isLeftAssociative)
         : Token(TokenType::Operator, std::move(value)), precedence(precedence), isLeftAssociative(isLeftAssociative) {}
+    
+    static OperatorProperties getOperatorProperties(char op) {
+		return _getOperatorProperties(op);
+	}
 
     int getPrecedence() const { return precedence; }
     bool getIsLeftAssociative() const { return isLeftAssociative; }
 
-    static const OperatorProperties& getOperatorProperties(char op) {
-		return getOperatorsMap().at(op);
-	}
-
     static bool isValidOperator(char op) {
-    
-        // std::map.find()
-        // Return Value: The function returns an iterator or a constant iterator which refers to the position where the key is present in the map. 
-        // If the key is not present in the map container, it returns an iterator or a constant iterator which refers to map.end(). 
-        return getOperatorsMap().find(op) != getOperatorsMap().end();
+        switch (op) {
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+        case '^':
+        case '=':
+        case '#':
+            return true;
+        default:
+            return false;
+        }
     }
 };
 

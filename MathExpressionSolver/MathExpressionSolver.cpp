@@ -22,12 +22,10 @@ int main() {
     // Set output precision only for floating point numbers (currently we have all numbers as double, we should either use a fixed point or atleast differentiate output)
     std::cout << std::fixed << std::setprecision(OUTPUT_PRECISION);
 
-    std::string input = "2 *    3 - 8";
+    std::string input = "[(2*3)^2]/4-(6+2)#3";
     Lexer lexer;
     ShuntingYard shuntingYard;
     ExpressionEvaluator evaluator;
-
-    std::pair<std::vector<Token*>, std::vector<Token*>> equationParts;
 
     // Aparent nu trb sa implementez ecuatii ca nu sunt intr o echipa
     try {

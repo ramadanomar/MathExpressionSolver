@@ -1,9 +1,11 @@
 #include "ShuntingYard.h"
+#include "DynamicArray.h"
+#include "Stack.h"
 #include <stdexcept>
 
-std::vector<Token*> ShuntingYard::infixToPostfix(const std::vector<Token*>& infixTokens) {
-    std::stack<Token*> operatorStack;
-    std::vector<Token*> postfixTokens;
+DynamicArray ShuntingYard::infixToPostfix(DynamicArray& infixTokens) {
+    Stack operatorStack;
+    DynamicArray postfixTokens;
 
     for (const auto& token : infixTokens) {
         if (token->getType() == TokenType::Number || token->getType() == TokenType::Variable) {

@@ -1,10 +1,12 @@
 #include "ExpressionEvaluator.h"
+#include "DynamicArray.h"
+#include "DoubleStack.h"
 #include "Token.h"
 #include <stdexcept>
 #include <cmath>
 
-double ExpressionEvaluator::evaluate(const std::vector<Token*>& tokens) {
-    std::stack<double> valueStack;
+double ExpressionEvaluator::evaluate(const DynamicArray& tokens) {
+    DoubleStack valueStack;
 
     for (const auto& token : tokens) {
         if (token->getType() == TokenType::Number) {

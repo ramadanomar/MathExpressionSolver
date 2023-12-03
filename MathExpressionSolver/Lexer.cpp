@@ -1,15 +1,15 @@
 #include "Lexer.h"
+#include "DynamicArray.h"
 #include <cctype>
 #include <stdexcept>
-#include <vector>
 
-std::vector<Token*> Lexer::tokenize(const std::string& input) {
+DynamicArray Lexer::tokenize(const std::string& input) {
     return tokenizeExpression(input);
 }
 
 
-std::vector<Token*> Lexer::tokenizeExpression(const std::string& expression) {
-    std::vector<Token*> tokens;
+DynamicArray Lexer::tokenizeExpression(const std::string& expression) {
+    DynamicArray tokens;
 
     for (size_t i = 0; i < expression.length(); ++i) {
         char c = expression[i];

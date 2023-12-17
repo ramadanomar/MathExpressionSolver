@@ -131,24 +131,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DoubleStack.cpp" />
-    <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="ExpressionEvaluator.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="MathExpressionSolver.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="ShuntingYard.cpp" />
-    <ClCompile Include="Stack.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DoubleStack.h" />
     <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="ShuntingYard.h" />
-    <ClInclude Include="Stack.h" />
     <ClInclude Include="Token.h" />
-    <ClInclude Include="DynamicArray.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

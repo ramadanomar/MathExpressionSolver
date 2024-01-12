@@ -27,7 +27,7 @@ void Menu::run() {
 void Menu::evaluateExpression(const std::string& input) {
     try {
         double result = calculateExpression(input);
-        std::cout << "Result: " << result << std::endl;
+        std::cout << std::fixed << std::setprecision(OUTPUT_PRECISION) << "Result: " << result << std::endl;
     }
     catch (const std::runtime_error& e) {
         std::cerr << "Error processing input: " << e.what() << std::endl;
@@ -41,4 +41,15 @@ double Menu::calculateExpression(const std::string& input) {
 
     auto tokens = lexer.tokenize(input);
     return evaluator.evaluate(shuntingYard.infixToPostfix(tokens));
+}
+
+void Menu::evaluateExpressionToFile(const std::string& expression, std::ostream& outputStream) {
+    outputStream << std::fixed << std::setprecision(OUTPUT_PRECISION);
+    try {
+        double result = calculateExpression(expression);
+        outputStream << "Result: " << result << std::endl;
+    }
+    catch (const std::runtime_error& e) {
+        outputStream << "Error: " << e.what() << std::endl;
+    }
 }

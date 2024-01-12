@@ -3,15 +3,21 @@
 #include "Token.h"
 #include <vector>
 #include <string>
-#include <utility>
 
 class Lexer {
-public:
-    std::vector<Token*> tokenize(const std::string& input);
 private:
-    bool isDigit(char c) const;
-    bool isAlpha(char c) const;
-    bool isVariableToken(const Token* token) const;
-    bool isNumberToken(const Token* token) const;
-    std::vector<Token*>  tokenizeExpression(const std::string& expression);
+    bool isSpace(char c) const;
+
+protected:
+    virtual std::vector<Token*> tokenizeExpression(const std::string& expression);
+    virtual Token* parseNumber(const std::string& expression, size_t& index);
+    virtual Token* createOperatorToken(char c);
+    virtual Token* parseVariable(const std::string& expression, size_t& index);
+    virtual Token* createParenthesisToken(char c, bool isOpen);
+    virtual bool isDigit(char c) const;
+    virtual bool isAlpha(char c) const;
+
+public:
+    virtual ~Lexer() = default;
+    std::vector<Token*> tokenize(const std::string& input);
 };

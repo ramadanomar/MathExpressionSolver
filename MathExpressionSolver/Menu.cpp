@@ -28,6 +28,11 @@ void Menu::evaluateExpression(const std::string& input) {
     try {
         double result = calculateExpression(input);
         std::cout << std::fixed << std::setprecision(OUTPUT_PRECISION) << "Result: " << result << std::endl;
+
+        // Save result to storage
+        if (resultStorage) {
+            resultStorage->saveResult(Result(input, result));
+        }
     }
     catch (const std::runtime_error& e) {
         std::cerr << "Error processing input: " << e.what() << std::endl;
@@ -48,6 +53,11 @@ void Menu::evaluateExpressionToFile(const std::string& expression, std::ostream&
     try {
         double result = calculateExpression(expression);
         outputStream << "Result: " << result << std::endl;
+
+        // Save result to storage
+        if (resultStorage) {
+            resultStorage->saveResult(Result(expression, result));
+        }
     }
     catch (const std::runtime_error& e) {
         outputStream << "Error: " << e.what() << std::endl;

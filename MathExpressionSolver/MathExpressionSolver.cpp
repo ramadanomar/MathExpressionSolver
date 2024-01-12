@@ -2,6 +2,8 @@
 #include "RegexFileValidator.h"
 #include "AlwaysValidFileValidator.h"
 
+#include "BinaryFileResultStorage.h"
+
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -24,7 +26,9 @@ std::map<std::string, std::string> parseArgs(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
     RegexFileValidator validator;
     // AlwaysValidFileValidator validator;
-    Menu menu(&validator);
+    BinaryFileResultStorage storage;
+
+    Menu menu(&validator, &storage);
     auto args = parseArgs(argc, argv);
 
     std::ifstream inputFile;

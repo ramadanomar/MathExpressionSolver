@@ -138,9 +138,12 @@
     <ClCompile Include="ShuntingYard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AlwaysValidFileValidator.h" />
     <ClInclude Include="ExpressionEvaluator.h" />
+    <ClInclude Include="FileValidator.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="RegexFileValidator.h" />
     <ClInclude Include="ShuntingYard.h" />
     <ClInclude Include="Token.h" />
   </ItemGroup>

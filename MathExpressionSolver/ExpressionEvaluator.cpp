@@ -32,6 +32,11 @@ double ExpressionEvaluator::evaluate(const std::vector<Token*>& tokens, std::fun
         throw std::runtime_error("Invalid RPN expression");
     }
 
+    // Clear Dynamic Memory
+    for (auto& token : tokens) {
+		delete token;
+	}
+
     return valueStack.top();
 }
 

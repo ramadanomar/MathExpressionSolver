@@ -10,3 +10,6 @@ Features
 - Can output result to STDOUT (console) or to a txt file
 - Previous expressions can be referenced using $ variables. For example if the first expression we ran had an answer of 144 we can reference it using $0 in the next expression
 - Has a menu to help the user navigate through some of the features.
+
+Class Structure:
+![ClassDiagram](https://github.com/ramadanomar/MathExpressionSolver/assets/55840806/2e47f977-1380-4619-81ac-c39b9411dac9)

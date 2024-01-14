@@ -8,8 +8,10 @@ enum class TokenType {
 	Number,
 	Operator,
 	Variable,
+	DollarVariable,
 	Parenthesis
 };
+// DollarVariable => $x pt ecuatii deja rezolvate.
 
 struct OperatorProperties {
 	int precedence;
@@ -78,6 +80,11 @@ public:
 class VariableToken : public Token {
 public:
 	VariableToken(std::string value) : Token(TokenType::Variable, std::move(value)) {}
+};
+
+class DollarVariableToken : public Token {
+public:
+	DollarVariableToken(std::string value) : Token(TokenType::DollarVariable, std::move(value)) {}
 };
 
 

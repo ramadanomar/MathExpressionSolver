@@ -14,8 +14,10 @@ public:
     Menu(FileValidator* validator, IResultStorage* storage)
         : validator(validator), resultStorage(storage) {}
 
-    void run();
-    void evaluateExpression(const std::string& expression);
-    double calculateExpression(const std::string& expression);
-    void evaluateExpressionToFile(const std::string& expression, std::ostream& outputStream);
+    virtual void run();
+    virtual void evaluateExpression(const std::string& expression);
+    virtual double calculateExpression(const std::string& expression);
+    virtual void evaluateExpressionToFile(const std::string& expression, std::ostream& outputStream);
+
+    virtual ~Menu() = default;
 };

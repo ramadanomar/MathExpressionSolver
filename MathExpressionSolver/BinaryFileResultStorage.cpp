@@ -4,34 +4,43 @@
 #include <cstdio>
 
 BinaryFileResultStorage::BinaryFileResultStorage() {
-    // Check if results.bin exists and delete it
-    if (std::ifstream("results.bin")) {
-        std::remove("results.bin");
+    // Delete the existing results file (if it exists) to start fresh
+    const char* filename = "results.bin";
+    if (std::ifstream(filename)) {
+        std::remove(filename);
     }
+
+    // Clear any in-memory results cache (Might not be necessary but just to be safe)
+    results.clear();
 }
+
 
 void BinaryFileResultStorage::saveResult(const Result& result) {
     std::ofstream outFile("results.bin", std::ios::binary | std::ios::app);
-
     if (!outFile) {
-		throw std::runtime_error("Unable to create/read results file for storing expression values");
-	}
+        throw std::runtime_error("Unable to create/read results file for storing expression values");
+    }
 
-	size_t expressionLength = result.expression.size();
+    size_t expressionLength = result.expression.size();
+    outFile.write(reinterpret_cast<const char*>(&expressionLength), sizeof(expressionLength));
+    outFile.write(result.expression.c_str(), expressionLength);
+    outFile.write(reinterpret_cast<const char*>(&result.value), sizeof(result.value));
+    outFile.close();
 
-	outFile.write(reinterpret_cast<const char*>(&expressionLength), sizeof(expressionLength));
-	outFile.write(result.expression.c_str(), expressionLength);
-
-	outFile.write(reinterpret_cast<const char*>(&result.value), sizeof(result.value));
-	outFile.close();
+    results.push_back(result);  // Cache the result in memory
 }
 
 std::vector<Result> BinaryFileResultStorage::loadResults() const {
-    std::vector<Result> results;
+    return results;  // Return the in-memory cache of results
+}
+
+void BinaryFileResultStorage::loadFromFile() const {
     std::ifstream inFile("results.bin", std::ios::binary);
     if (!inFile) {
-        throw std::runtime_error("Unable to open file for reading.");
+        return;  // If the file doesn't exist, just return
     }
+
+    results.clear();  // Purge in-memory cache of results
 
     while (inFile.peek() != EOF) {
         size_t expressionLength = 0;
@@ -43,6 +52,15 @@ std::vector<Result> BinaryFileResultStorage::loadResults() const {
         results.emplace_back(expression, value);
     }
     inFile.close();
+}
 
-    return results;
+bool BinaryFileResultStorage::hasResult(int index) const {
+    return index >= 0 && static_cast<size_t>(index) < results.size();
+}
+
+double BinaryFileResultStorage::getResult(int index) const {
+    if (!hasResult(index)) {
+        throw std::runtime_error("Result not found for index: " + std::to_string(index));
+    }
+    return results[index].value;
 }

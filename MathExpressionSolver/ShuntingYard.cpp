@@ -6,7 +6,7 @@ std::vector<Token*> ShuntingYard::infixToPostfix(const std::vector<Token*>& infi
     std::vector<Token*> postfixTokens;
 
     for (const auto& token : infixTokens) {
-        if (token->getType() == TokenType::Number || token->getType() == TokenType::Variable) {
+        if (token->getType() == TokenType::Number || token->getType() == TokenType::Variable || token->getType() == TokenType::DollarVariable) {
             postfixTokens.push_back(token);
         }
         else if (isOperator(token)) {

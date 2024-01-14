@@ -8,6 +8,7 @@
 
 constexpr int OUTPUT_PRECISION = 4;
 
+
 void Menu::run() {
     std::string input;
     std::cout << std::fixed << std::setprecision(OUTPUT_PRECISION);
@@ -45,7 +46,15 @@ double Menu::calculateExpression(const std::string& input) {
     ExpressionEvaluator evaluator;
 
     auto tokens = lexer.tokenize(input);
-    return evaluator.evaluate(shuntingYard.infixToPostfix(tokens));
+
+    auto getResult = [this](int index) -> double {
+        if (!this->resultStorage->hasResult(index)) {
+            throw std::runtime_error("Equation number " + std::to_string(index) + " was not found");
+        }
+        return this->resultStorage->getResult(index);
+    };
+
+    return evaluator.evaluate(shuntingYard.infixToPostfix(tokens), getResult);
 }
 
 void Menu::evaluateExpressionToFile(const std::string& expression, std::ostream& outputStream) {

@@ -13,6 +13,7 @@ protected:
     virtual Token* parseNumber(const std::string& expression, size_t& index);
     virtual Token* createOperatorToken(char c);
     virtual Token* parseVariable(const std::string& expression, size_t& index);
+    virtual Token* parseDollarVariable(const std::string& expression, size_t& index);
     virtual Token* createParenthesisToken(char c, bool isOpen);
     virtual bool isDigit(char c) const;
     virtual bool isAlpha(char c) const;

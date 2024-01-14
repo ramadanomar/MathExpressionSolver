@@ -18,6 +18,15 @@ std::vector<Token*> Lexer::tokenizeExpression(const std::string& expression) {
         else if (OperatorToken::isValidOperator(c)) {
             tokens.push_back(createOperatorToken(c));
         }
+        else if (c == '$') {
+            if (i + 1 < expression.length() && isDigit(expression[i + 1])) {
+                tokens.push_back(parseDollarVariable(expression, i));
+            }
+            else {
+                throw std::runtime_error("Invalid usage of '$'. Expected digit after '$'."); // Nu cred ca putem prinde erorile cu cate ecuatii au fost rezolvate in faza de lexing
+            }
+        }
+        // Variable nu am mai folosit tinand cont ca sunt singur in echipa si era cerinta doar de grup. De aia nu am folosit functia asta pt ecuatii deja rezolvate
         else if (isAlpha(c)) {
             tokens.push_back(parseVariable(expression, i));
         }
@@ -69,6 +78,16 @@ Token* Lexer::parseVariable(const std::string& expression, size_t& index) {
     --index; // Necesar ca sa nu sarim peste un caracter la urmatoarea iteratie (din cauza incrementarii din for)
 
     return new VariableToken(varStr);
+}
+
+Token* Lexer::parseDollarVariable(const std::string& expression, size_t& index) {
+    std::string varStr(1, expression[index]); // Start with '$'
+    while (++index < expression.length() && isDigit(expression[index])) {
+        varStr += expression[index];
+    }
+    --index;
+
+    return new DollarVariableToken(varStr);
 }
 
 Token* Lexer::createParenthesisToken(char c, bool isOpen) {

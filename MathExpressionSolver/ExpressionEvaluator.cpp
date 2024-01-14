@@ -4,12 +4,19 @@
 #include <stdexcept>
 #include <cmath>
 
-double ExpressionEvaluator::evaluate(const std::vector<Token*>& tokens) {
+double ExpressionEvaluator::evaluate(const std::vector<Token*>& tokens, std::function<double(int)> getResult) {
     std::stack<double> valueStack;
 
     for (const auto& token : tokens) {
         if (token->getType() == TokenType::Number) {
             valueStack.push(std::stod(token->getValue()));
+        }
+        else if (token->getType() == TokenType::DollarVariable) {
+            int eqIndex = std::stoi(token->getValue().substr(1)); // $1 -> 1 etc. (string to int skipping the $)
+
+            // fetch actual from cache/storage
+            double result = getResult(eqIndex);
+            valueStack.push(result);
         }
         else if (token->getType() == TokenType::Operator) {
             if (valueStack.size() < 2) {

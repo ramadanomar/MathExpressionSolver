@@ -54,8 +54,9 @@ double Menu::calculateExpression(const std::string& input) {
         return this->resultStorage->getResult(index);
     };
 
-    return evaluator.evaluate(shuntingYard.infixToPostfix(tokens), getResult);
+    double evalRes = evaluator.evaluate(shuntingYard.infixToPostfix(tokens), getResult);
 
+    return evalRes;
 }
 
 void Menu::evaluateExpressionToFile(const std::string& expression, std::ostream& outputStream) {

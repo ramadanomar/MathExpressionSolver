@@ -3,6 +3,7 @@
 #include "Token.h"
 #include <vector>
 #include <string>
+#include <memory>
 
 class Lexer {
 private:
